@@ -11,6 +11,14 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
+	"peerDependencies": {
+		"o1js": "0.15.*"
+	},
+	"dependencies": {
+		"@mina-wallet-adapter/core": "^0.1.0",
+		"@mina-wallet-adapter/ui-svelte": "^0.1.0",
+		"@mina-wallet-adapter/wallets": "^0.1.0"
+	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
