@@ -1,0 +1,36 @@
+{
+  "name": "mina-wallet-adapter-starter-svelte",
+  "version": "0.1.0",
+  "description": "Starter template for building zkApps with Mina Wallet Adapter using Svelte",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": "true",
+  "workspaces": [
+    "contracts",
+    "ui"
+  ],
+  "scripts": {
+    "predev": "npm run build --workspace contracts",
+    "dev": "npm run dev --workspace ui",
+    "build": "npm run build --workspaces --if-present",
+    "start": "npm run preview --workspace ui",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mina-wallet-adapter/starter-kit-svelte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mina-wallet-adapter/starter-kit-svelte/issues"
+  },
+  "homepage": "https://github.com/mina-wallet-adapter/starter-kit-svelte#readme",
+  "keywords": [
+    "mina-wallet-adapter",
+    "starter",
+    "svelte",
+    "sveltekit",
+    "zkApp"
+  ]
+}
