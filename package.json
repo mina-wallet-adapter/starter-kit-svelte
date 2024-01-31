@@ -13,7 +13,7 @@
     "predev": "npm run build --workspace contracts",
     "dev": "npm run dev --workspace ui",
     "build": "npm run build --workspaces --if-present",
-    "start": "npm run preview --workspace ui",
+    "preview": "npm run preview --workspace ui",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present"
