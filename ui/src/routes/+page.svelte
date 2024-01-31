@@ -6,7 +6,9 @@
 
 	let value: number = 0;
 
-	async function submit() {}
+	async function submit() {
+		alert('This feature is WIP.');
+	}
 </script>
 
 <main>
@@ -21,7 +23,7 @@
 	<section>
 		<h1>zkApp Starter-Kit with <i>Svelte</i></h1>
 		<p>
-			This is a project template built with
+			This is a project template for creating zkApps built with
 			<a
 				href="https://github.com/mina-wallet-adapter/wallet-adapter"
 				target="_blank"
@@ -31,7 +33,7 @@
 			>,
 			<b>o1js</b>,
 			<b>Svelte</b> and
-			<b>SvelteKit</b> for creating zkApps.
+			<b>SvelteKit</b>.
 		</p>
 
 		<div class="callout">
