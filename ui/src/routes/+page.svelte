@@ -1,13 +1,63 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { MINA_BERKELEY_CHAIN } from 'mina-wallet-standard';
 	import { WalletProvider, WalletMultiButton, walletStore } from '@mina-wallet-adapter/ui-svelte';
+	import {
+		compileContract,
+		createTransaction,
+		getOnChainValue,
+		initContract,
+		waitTransaction
+	} from '$lib/zkapp';
 	import '@mina-wallet-adapter/ui-svelte/dist/wallet-adapter.css';
 	import '$lib/global.css';
 	import '$lib/page.css';
 
 	let value: number = 0;
+	let txnId: string | undefined;
+	let statusMsg = '';
 
-	async function submit() {
-		alert('This feature is WIP.');
+	onMount(async () => {
+		initContract();
+	});
+
+	async function getValue() {
+		value = await getOnChainValue();
+		return value;
+	}
+
+	async function submit(e: { currentTarget: any }) {
+		const button = e.currentTarget;
+
+		try {
+			txnId = '';
+			button.disabled = true;
+			button.style.cursor = 'wait';
+			document.body.style.cursor = 'wait';
+
+			statusMsg = 'Compiling zkApp contract ... (This might take several minutes)';
+			await compileContract();
+
+			statusMsg = 'Creating transaction ... (This might take several minutes)';
+			const txn = await createTransaction($walletStore.publicKey!);
+
+			statusMsg = 'Signing transaction ...';
+			txnId = await $walletStore.signAndSendTransaction(txn.toJSON());
+
+			statusMsg =
+				'Waiting for transaction to be included in a block ... (This might take several minutes)';
+			await waitTransaction(txnId!);
+
+			await getValue();
+		} catch (error: any) {
+			console.log('Error:', error.message);
+			alert('Error: ' + error.message);
+		} finally {
+			statusMsg = '';
+			document.body.style.cursor = '';
+			button.style.cursor = '';
+			button.disabled = false;
+		}
 	}
 </script>
 
@@ -38,11 +88,31 @@
 
 		<div class="callout">
 			{#if $walletStore?.connected}
-				<p>On-chain state: <strong>{value}</strong></p>
-				<p>Click below button to add 2 to the on-chain state.</p>
-				<button class="wallet-adapter-button wallet-adapter-button-trigger" on:click={submit}>
-					Add 2
-				</button>
+				{#if $walletStore?.chain === MINA_BERKELEY_CHAIN}
+					{#await getValue()}
+						<p>loading ...</p>
+					{:then}
+						<p>
+							<span class="mr-2">Chain: <strong>{$walletStore?.chain}</strong></span>
+							<span>On-chain state: <strong>{value}</strong></span>
+						</p>
+						<p>Click below button to add 2 to the on-chain state.</p>
+						<button class="wallet-adapter-button wallet-adapter-button-trigger" on:click={submit}>
+							Add 2
+						</button>
+						{#if txnId}
+							<p>Transaction ID: {txnId}</p>
+						{/if}
+						{#if statusMsg}
+							<p class="warning">{statusMsg}</p>
+						{/if}
+					{:catch error}
+						<p class="warning">Failed to fetch on-chain state. {error.message}</p>
+					{/await}
+				{:else}
+					<p class="warning">You are connected to {$walletStore?.chain}</p>
+					<p>Switch to Berkeley chain on {$walletStore.name} wallet.</p>
+				{/if}
 			{:else}
 				<p class="warning">No wallet connected</p>
 				<p>Click on the <b>Connect Wallet</b> button above to connect.</p>

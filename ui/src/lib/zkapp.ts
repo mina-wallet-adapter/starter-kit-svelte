@@ -77,7 +77,7 @@ export async function createTransaction(publicKey: string) {
 
 export async function waitTransaction(
 	txId: string,
-	maxAttempts = 45,
+	maxAttempts = 100,
 	interval = 20000
 ): Promise<void | Error> {
 	let attempts = 0;

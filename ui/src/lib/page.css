@@ -83,6 +83,10 @@ footer p {
 	color: rgb(var(--warning-rgb));
 }
 
+.mr-2 {
+	margin-right: 2rem;
+}
+
 @media (min-width: 768px) {
 	main {
 		padding-inline: 2rem;
@@ -93,7 +97,7 @@ footer p {
 	}
 
 	main strong {
-		font-size: 2rem;
+		font-size: 1.5rem;
 	}
 }
 
