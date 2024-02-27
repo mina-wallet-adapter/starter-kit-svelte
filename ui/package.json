@@ -12,12 +12,11 @@
 		"format": "prettier --write ."
 	},
 	"peerDependencies": {
-		"o1js": "0.15.*"
+		"o1js": "0.16.*"
 	},
 	"dependencies": {
-		"@mina-wallet-adapter/core": "^0.1.0",
-		"@mina-wallet-adapter/ui-svelte": "^0.1.0",
-		"@mina-wallet-adapter/wallets": "^0.1.0"
+		"@mina-wallet-adapter/ui-svelte": "^0.1.1",
+		"mina-wallet-standard": "^0.1.2"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
