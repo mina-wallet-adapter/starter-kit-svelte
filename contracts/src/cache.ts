@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import { Cache } from 'o1js';
 import { Add } from './Add.js';
 
-const cacheDir = 'build/cache';
+const cacheDir = '../ui/static/cache';
 const listFile = `${cacheDir}/list.json`;
 
 async function cacheCompile() {
