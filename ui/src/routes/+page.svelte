@@ -1,28 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { MINA_BERKELEY_CHAIN } from 'mina-wallet-standard';
 	import { WalletProvider, WalletMultiButton, walletStore } from '@mina-wallet-adapter/ui-svelte';
-	import {
-		compileContract,
-		createTransaction,
-		getOnChainValue,
-		initContract,
-		waitTransaction
-	} from '$lib/zkapp';
 	import '@mina-wallet-adapter/ui-svelte/dist/wallet-adapter.css';
 	import '$lib/global.css';
 	import '$lib/page.css';
 
+	let zk: any;
 	let value: number = 0;
 	let txnId: string | undefined;
 	let statusMsg = '';
 
-	onMount(async () => {
-		initContract();
-	});
+	async function initZkApp() {
+		if (zk) return;
+		zk = await import('$lib/zkapp');
+		await zk.initContract();
+	}
 
 	async function getValue() {
-		value = await getOnChainValue();
+		await initZkApp();
+		value = await zk!.getOnChainValue();
 		return value;
 	}
 
@@ -36,17 +32,17 @@
 			document.body.style.cursor = 'wait';
 
 			statusMsg = 'Compiling zkApp contract ... (This might take several minutes)';
-			await compileContract();
+			await zk!.compileContract();
 
 			statusMsg = 'Creating transaction ... (This might take several minutes)';
-			const txn = await createTransaction($walletStore.publicKey!);
+			const txn = await zk!.createTransaction($walletStore.publicKey!);
 
 			statusMsg = 'Signing transaction ...';
 			txnId = await $walletStore.signAndSendTransaction(txn.toJSON());
 
 			statusMsg =
 				'Waiting for transaction to be included in a block ... (This might take several minutes)';
-			await waitTransaction(txnId!);
+			await zk!.waitTransaction(txnId!);
 
 			await getValue();
 		} catch (error: any) {
