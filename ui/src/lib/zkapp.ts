@@ -30,13 +30,13 @@ export async function compileContract() {
 }
 
 async function fetchCache() {
-	const { files } = await fetch('/cache/list.json').then((res) => res.json());
+	const { files } = await fetch('./cache/list.json').then((res) => res.json());
 
 	return Promise.all(
 		files.map(async (file: string) => {
 			const [header, data] = await Promise.all([
-				fetch(`/cache/${file}.header`).then((res) => res.text()),
-				fetch(`/cache/${file}`).then((res) => res.text())
+				fetch(`./cache/${file}.header`).then((res) => res.text()),
+				fetch(`./cache/${file}`).then((res) => res.text())
 			]);
 			return { file, header, data };
 		})
